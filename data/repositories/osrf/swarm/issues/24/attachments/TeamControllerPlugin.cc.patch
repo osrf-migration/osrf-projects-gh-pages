@@ -1,0 +1,24 @@
+--- temp.cc	2015-12-14 14:33:54.131115193 -0500
++++ ../TeamControllerPlugin.cc	2015-12-14 14:28:40.839108537 -0500
+@@ -62,8 +62,19 @@
+       }
+     case ROTOR:
+       {
+-        this->SetLinearVelocity(ignition::math::Vector3d(0, 0, 1));
+-        this->SetAngularVelocity(ignition::math::Vector3d(0, 0, -0.1));
++        this->SetLinearVelocity(ignition::math::Vector3d(0, 0, 0));
++        this->SetAngularVelocity(ignition::math::Vector3d(0, 0, 0));
++
++        double latitude, longitude, altitude;
++        double elevation;
++        swarm::TerrainType type;
++        this->Pose(latitude, longitude, altitude);
++        this->MapQuery(latitude, longitude, elevation, type);
++
++        std::cout << elevation << ", "
++             << altitude << std::endl;
++
++
+         break;
+       }
+     case FIXED_WING:

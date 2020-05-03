@@ -1,0 +1,11 @@
+--- /tmp/uvYzzC_RobotPlugin.hh	2015-12-15 16:46:57.413120263 -0500
++++ include/swarm/RobotPlugin.hh	2015-12-15 16:23:37.229090518 -0500
+@@ -853,6 +853,8 @@
+     friend class BrokerPlugin;
+ 
+     public: bool outOfBounds;
++
++    public: void output_elevation();
+   };
+ }
+ #endif

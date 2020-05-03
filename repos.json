@@ -1,0 +1,26 @@
+{
+    "osrf/citysim": {
+        "project_file": "data/repositories/osrf/citysim.json",
+        "project_path": "data/repositories/osrf/citysim/",
+        "is_fork": false,
+        "github_repo": "https://github.com/osrf/citysim"
+    },
+    "osrf/robocup3ds": {
+        "project_file": "data/repositories/osrf/robocup3ds.json",
+        "project_path": "data/repositories/osrf/robocup3ds/",
+        "is_fork": false,
+        "github_repo": "https://github.com/osrf/robocup3ds"
+    },
+    "osrf/servicesim": {
+        "project_file": "data/repositories/osrf/servicesim.json",
+        "project_path": "data/repositories/osrf/servicesim/",
+        "is_fork": false,
+        "github_repo": "https://github.com/osrf/servicesim"
+    },
+    "osrf/swarm": {
+        "project_file": "data/repositories/osrf/swarm.json",
+        "project_path": "data/repositories/osrf/swarm/",
+        "is_fork": false,
+        "github_repo": "https://github.com/osrf/swarm"
+    }
+}

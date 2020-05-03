@@ -1,0 +1,20 @@
+--- complete_10.world.orig	2015-12-15 16:48:09.269121790 -0500
++++ complete_10.world	2015-12-15 15:03:55.364988932 -0500
+@@ -180,6 +180,17 @@
+ <model name="boo">
+   <pose>0 0 0.5 0 0 0</pose>
+   <static>true</static>
++  <link name="my_visual_link">
++      <visual name="my_visual">
++          <plugin name='my_visual_plugin' filename='libgui_grid_lines.so'/>
++          <pose>0 0 0 0 0 0</pose>
++          <geometry>
++             <box>
++               <size>1 1 1</size>
++             </box>
++          </geometry>
++      </visual>
++  </link>
+   <link name="link">
+      <kinematic>true</kinematic>
+      <collision name="collision">

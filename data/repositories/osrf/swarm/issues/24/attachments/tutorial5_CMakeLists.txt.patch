@@ -1,0 +1,38 @@
+--- /tmp/8FK04Q_CMakeLists.txt	2015-12-15 16:47:30.617120969 -0500
++++ tutorials/tutorial_5/CMakeLists.txt	2015-12-15 16:29:54.093098524 -0500
+@@ -4,13 +4,34 @@
+ # Find the Swarm library.
+ find_package(swarm QUIET REQUIRED)
+ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${SWARM_CXX_FLAGS}")
+-include_directories(${SWARM_INCLUDE_DIRS})
++include_directories(${SWARM_INCLUDE_DIRS} ~/repos/robotics/swarm/gt_swarm/swarm_utils/incl)
+ link_directories(${SWARM_LIBRARY_DIRS})
+ 
++find_package (Qt4)
++find_package(Protobuf REQUIRED)
++find_package(gazebo REQUIRED)
++
++include (${QT_USE_FILE})
++add_definitions(${QT_DEFINITIONS})
++
++include_directories(SYSTEM ${GAZEBO_INCLUDE_DIRS})
++link_directories(${GAZEBO_LIBRARY_DIRS})
++
++set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GAZEBO_CXX_FLAGS}")
++
+ #################################################
+ # Generate the team's plugin for controlling a robot.
+ add_library(TeamControllerPlugin SHARED TeamControllerPlugin.cc)
+ target_link_libraries(TeamControllerPlugin ${SWARM_LIBRARIES})
+ # GNUInstallDirst defines CMAKE_INSTALL_LIBDIR, among other things.
+ include(GNUInstallDirs)
++add_library(gui_grid_lines SHARED ${headers_MOC} grid_lines.cc)
++
++target_link_libraries(gui_grid_lines 
++    ${GAZEBO_LIBRARIES}
++    ${QT_LIBRARIES}
++    ${SWARM_LIBRARIES}
++    ${PROTOBUF_LIBRARIES})
++
+ install (TARGETS TeamControllerPlugin DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT shlib)
++install (TARGETS gui_grid_lines DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT shlib)

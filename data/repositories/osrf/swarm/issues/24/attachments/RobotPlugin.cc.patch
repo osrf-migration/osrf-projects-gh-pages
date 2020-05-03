@@ -1,0 +1,96 @@
+--- /tmp/pH1ByP_RobotPlugin.cc	2015-12-15 16:46:37.553119841 -0500
++++ src/RobotPlugin.cc	2015-12-15 16:36:03.833106379 -0500
+@@ -945,6 +945,8 @@
+       this->boundingBoxes.push_back(mdl->GetBoundingBox().Ign());
+     }
+   }
++
++  this->output_elevation();
+ }
+ 
+ //////////////////////////////////////////////////
+@@ -1256,3 +1258,84 @@
+       this->img.objects[_model] = _p;
+   }
+ }
++
++void RobotPlugin::output_elevation() {
++
++    ignition::math::Pose3d pose = this->model->GetWorldPose().Ign();
++    ignition::math::Vector3d norm;
++    ignition::math::Vector3d terrainPos;
++    this->common.TerrainLookup(pose.Pos(), terrainPos, norm);
++    double curr_el = terrainPos.Z();
++
++    std::ofstream out_file("elevation2.txt");
++    ignition::math::Vector2d beg_coord, end_coord;
++    int num_steps;
++
++    // loop with lines in the Y direction
++    beg_coord = ignition::math::Vector2d(-this->common.TerrainSize().X() * 0.5,
++                                         -this->common.TerrainSize().Y() * 0.5);
++    end_coord = ignition::math::Vector2d(-this->common.TerrainSize().X() * 0.5,
++                                         this->common.TerrainSize().Y() * 0.5);
++
++    num_steps = (end_coord.Y() - beg_coord.Y()) / 10;   // a point every 10 meters
++
++    while (true) {
++
++        for (long i = 0; i <= num_steps; i++) {
++            double pct = i / ((double)num_steps);
++            ignition::math::Vector2d temp_coord = beg_coord + (end_coord - beg_coord) * pct;
++            pose.Pos().X() = temp_coord.X();
++            pose.Pos().Y() = temp_coord.Y();
++            this->common.TerrainLookup(pose.Pos(), terrainPos, norm);
++
++            double el = terrainPos.Z();
++            if (el > 1e-10) {
++                out_file << temp_coord.X() << " " << temp_coord.Y() << " " << el - curr_el << std::endl;
++            }
++        }
++
++        if (beg_coord.X() >= this->common.TerrainSize().X()) {
++            break;
++        }
++
++        beg_coord.X() = std::min(this->common.TerrainSize().X(), beg_coord.X() + 200);
++        end_coord.X() = std::min(this->common.TerrainSize().X(), end_coord.X() + 200);
++
++    }
++
++    // loop with lines in the X direction
++    beg_coord = ignition::math::Vector2d(-this->common.TerrainSize().X() * 0.5,
++                                         -this->common.TerrainSize().Y() * 0.5);
++    end_coord = ignition::math::Vector2d(this->common.TerrainSize().X() * 0.5,
++                                         -this->common.TerrainSize().Y() * 0.5);
++
++    num_steps = (end_coord.X() - beg_coord.X()) / 10;   // a point every 10 meters
++
++    while (true) {
++
++        for (long i = 0; i <= num_steps; i++) {
++            double pct = i / ((double)num_steps);
++            ignition::math::Vector2d temp_coord = beg_coord + (end_coord - beg_coord) * pct;
++            pose.Pos().X() = temp_coord.X();
++            pose.Pos().Y() = temp_coord.Y();
++            this->common.TerrainLookup(pose.Pos(), terrainPos, norm);
++
++            double el = terrainPos.Z();
++            if (el > 1e-10) {
++                out_file << temp_coord.X() << " " << temp_coord.Y() << " " << el - curr_el << std::endl;
++            }
++        }
++
++        if (beg_coord.Y() >= this->common.TerrainSize().Y()) {
++            break;
++        }
++
++        beg_coord.Y() = std::min(this->common.TerrainSize().Y(), beg_coord.Y() + 200);
++        end_coord.Y() = std::min(this->common.TerrainSize().Y(), end_coord.Y() + 200);
++
++    }
++
++
++    out_file.close(); 
++
++}
